@@ -86,4 +86,13 @@ dependencies {
     //SwipeRefresh
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "androidx.cardview:cardview:1.0.0"
+
+    //RoomDao
+    def roomVersion = "2.4.0"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    implementation("androidx.room:room-rxjava2:$roomVersion")
+
+    implementation("androidx.room:room-paging:2.4.0")
 }
