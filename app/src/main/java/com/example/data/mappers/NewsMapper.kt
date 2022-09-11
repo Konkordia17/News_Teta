@@ -13,4 +13,13 @@ class NewsMapper @Inject constructor() {
             urlToImage = entity.urlToImage.orEmpty()
         )
     }
+
+    fun newsToNewsEntity(news: News): NewsEntity {
+        return NewsEntity(
+            publishedAt = news.publishedAt,
+            title = news.title,
+            description = news.description,
+            urlToImage = news.urlToImage
+        )
+    }
 }

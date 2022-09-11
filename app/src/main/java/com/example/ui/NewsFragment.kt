@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.domain.model.News
 import com.example.ui.databinding.FragmentNewsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,11 +36,35 @@ class NewsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initList()
         observeLiveData()
+        setOnButtonClick()
     }
 
     private fun observeLiveData() {
         viewModel.news.observe(viewLifecycleOwner) {
             newAdapter.submitList(it)
+            showLoading(it)
+        }
+
+        viewModel.isException.observe(viewLifecycleOwner) {
+            if (it) {
+                Toast.makeText(requireContext(), "Ошибка соединения, повторите попытку", Toast.LENGTH_SHORT).show()
+                binding.updateButton.visibility = View.VISIBLE
+                binding.progress.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun setOnButtonClick() {
+        binding.updateButton.setOnClickListener {
+            binding.progress.visibility = View.VISIBLE
+            viewModel.updateNews()
+        }
+    }
+
+    private fun showLoading(news: List<News>) {
+        if (news.isNotEmpty()) {
+            binding.progress.visibility = View.GONE
+            binding.updateButton.visibility = View.GONE
         }
     }
 
@@ -51,7 +77,8 @@ class NewsFragment : Fragment() {
             setHasFixedSize(true)
         }
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.getNews()
+            newAdapter.submitList(emptyList())
+            viewModel.updateNews()
             binding.swipeRefresh.isRefreshing = false
         }
     }

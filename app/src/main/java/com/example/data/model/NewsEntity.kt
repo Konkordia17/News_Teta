@@ -1,6 +1,9 @@
 package com.example.data.model
 
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 
@@ -12,10 +15,15 @@ data class ArticlesEntity(
 
 @Parcelize
 @JsonClass(generateAdapter = true)
+@Entity(tableName = "news")
 data class NewsEntity(
+    @ColumnInfo(name = "publishedAt")
     val publishedAt: String?,
-    val title: String?,
+    @PrimaryKey @ColumnInfo(name = "title")
+    val title: String,
+    @ColumnInfo(name = "description")
     val description: String?,
+    @ColumnInfo(name = "image")
     val urlToImage: String?
 ) : Parcelable
 
